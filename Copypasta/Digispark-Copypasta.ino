@@ -1,4 +1,3 @@
-
 #include <DigiKeyboard.h>
 
 boolean debug = false;

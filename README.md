@@ -3,6 +3,7 @@ karaidon-arduino
 
 for arduino and arduino compatible projects
 
+contact: Ben@Karaidon.com
 
 The MIT License (MIT)
 

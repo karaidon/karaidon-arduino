@@ -1,0 +1,193 @@
+//#include <EEPROM.h>
+
+#define ENCODER_OPTIMIZE_INTERRUPTS
+#include <Encoder.h>
+
+boolean debug = true;
+
+Encoder encoder1(0, 1);
+Encoder encoder2(2, 3);
+Encoder encoder3(4, 5);
+Encoder encoder4(6, 7);
+Encoder encoder5(8, 9);
+Encoder encoder6(10, 11);
+Encoder encoder7(12, 13);
+Encoder encoder8(14, 15);
+
+int encoder1Value = 0;
+int encoder2Value = 0;
+int encoder3Value = 0;
+int encoder4Value = 0;
+int encoder5Value = 0;
+int encoder6Value = 0;
+int encoder7Value = 0;
+int encoder8Value = 0;
+
+boolean encoderIncrementMode = false;
+
+int potPins[8] = {16,17,18,19,20,21,22,23};
+int prevPotValue[8];
+int prevPotRawValue[8];
+int potThreshold = 40;
+
+int currentBank = 0;
+int bankStart[4] = {10,27,44,61};
+
+int faderPin = 34; //A10
+int faderValue = 0;
+
+boolean buttonSwitch = false;
+int buttonPin = 24;
+
+int LEDPin1 = 26;
+int LEDPin2 = 29;
+
+//#define CORE_ADC10_PIN  	34
+//#define CORE_ADC11_PIN		35
+//#define CORE_ADC12_PIN		36
+//#define CORE_ADC13_PIN		37
+
+void setup()
+{
+  if (debug == false) Serial.begin(31250); //Debug rate = 9600
+  else Serial.begin(38400);
+  
+  pinMode(buttonPin, INPUT_PULLUP);    // button as input
+  //digitalWrite(buttonPin, HIGH); // turns on pull-up resistor after input
+  
+  pinMode(LEDPin1, OUTPUT);
+  pinMode(LEDPin2, OUTPUT);
+}
+
+void loop()
+{
+  /*undefined Midi CC Values:
+    3
+    9
+    14-15
+    20-31
+    85-90
+    102-119
+  */
+  
+  if (digitalRead(buttonPin) == LOW)
+  {
+    if (buttonSwitch == false)
+    {
+      incBank();
+      buttonSwitch = true;      
+    }
+  }
+  else 
+  {
+    buttonSwitch = false;
+  }
+  
+  readEncoder(encoder1, &encoder1Value, bankStart[currentBank]);
+  readEncoder(encoder2, &encoder2Value, bankStart[currentBank]+1);
+  readEncoder(encoder3, &encoder3Value, bankStart[currentBank]+2);
+  readEncoder(encoder4, &encoder4Value, bankStart[currentBank]+3);
+  readEncoder(encoder5, &encoder5Value, bankStart[currentBank]+4);
+  readEncoder(encoder6, &encoder6Value, bankStart[currentBank]+5);
+  readEncoder(encoder7, &encoder7Value, bankStart[currentBank]+6);
+  readEncoder(encoder8, &encoder8Value, bankStart[currentBank]+7);
+  
+  for(int i=0;i<8;i++)
+  {
+    int rawValue = analogRead(potPins[i]);
+    int mapValue = map(rawValue,0,1023,0,127);
+    if (prevPotValue[i] != mapValue && abs(rawValue - prevPotRawValue[i]) >= potThreshold)
+    {
+     prevPotValue[i] = mapValue;
+     prevPotRawValue[i] = rawValue;
+     if (debug == false) usbMIDI.sendControlChange(bankStart[currentBank]+8+i,mapValue,1);
+     if (debug == true)
+     {
+       Serial.print("Pot Change, CC: ");
+       Serial.print(bankStart[currentBank]+8+i);
+       Serial.print(", value: ");
+       Serial.println(mapValue);
+     }
+    }
+  }
+  
+  int rawValue = analogRead(faderPin);
+  int mapValue = map(rawValue,0,1023,0,127);
+  if (faderValue != mapValue)
+  {
+   faderValue = mapValue;
+   if (debug == false) usbMIDI.sendControlChange(bankStart[currentBank]+8+8,mapValue,1);
+   if (debug == true)
+   {
+     Serial.print("Fader Change, CC: ");
+     Serial.print(bankStart[currentBank]+8+8);
+     Serial.print(", value: ");
+     Serial.println(mapValue);
+   }
+  }
+  
+}
+
+void incBank()
+{
+  currentBank++;
+  if (currentBank > 3)
+  {
+    currentBank = 0;
+  }
+  changeLED();
+}
+
+void changeLED()
+{
+  //Bank 1: off off
+  //Bank 2: on  off
+  //Bank 3: off on
+  //Bank 4: on  on
+  
+  if (currentBank == 1 || currentBank == 3)
+  {
+    digitalWrite(LEDPin1, HIGH);
+  }
+  else
+  {
+    digitalWrite(LEDPin1, LOW);
+  }
+  if (currentBank == 2 || currentBank == 3)
+  {
+    digitalWrite(LEDPin2, HIGH);
+  }
+  else
+  {
+    digitalWrite(LEDPin2, LOW);
+  }
+}
+
+void readEncoder(Encoder _enc, int *_value, int _cc)
+{
+  //int *ptr = NULL;
+  //ptr = &_value;
+  long encoderTempValue = _enc.read();
+  if (encoderTempValue != *_value && encoderTempValue <= 127 && encoderTempValue >= 0)
+  {
+    if (encoderTempValue > 127)
+    {
+      _enc.write(127);
+      encoderTempValue = 127;
+    }
+    else if (encoderTempValue < 0)
+    {
+      _enc.write(0);
+      encoderTempValue = 0;
+    }
+    *_value = encoderTempValue;
+    if (debug == false) usbMIDI.sendControlChange(_cc,encoderTempValue,1);
+    if (debug == true)
+    {
+      Serial.print("Encoder Change, CC: ");
+      Serial.print(_cc);
+      Serial.print(", value: ");
+      Serial.println(encoderTempValue);
+    }
+  }
+}

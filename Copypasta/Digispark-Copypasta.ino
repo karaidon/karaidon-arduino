@@ -1,3 +1,15 @@
+
+/**
+Copypasta
+Author: Benedict Lee
+Contact:Ben@Karaidon.com
+2013
+MIT License
+URL: https://github.com/karaidon/karaidon-arduino
+
+3 Button Keyboard Shortcuts HID Device
+**/
+
 #include <DigiKeyboard.h>
 
 boolean debug = false;

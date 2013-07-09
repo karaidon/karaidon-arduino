@@ -53,7 +53,7 @@ int prevFaderValue = 0;
 
 boolean buttonSwitch = false;
 
-//#define CORE_ADC10_PIN  	34
+//#define CORE_ADC10_PIN    34
 //#define CORE_ADC11_PIN		35
 //#define CORE_ADC12_PIN		36
 //#define CORE_ADC13_PIN		37
@@ -120,7 +120,7 @@ void loop()
   {
     int rawValue = analogRead(potPins[i]);
     int mapValue = map(rawValue,0,1023,-1,128);
-    if (prevPotValue[i] != mapValue && abs(rawValue - prevPotRawValue[i]) >= faderThreshold && abs(mapValue - prevPotValue[i]) <= changeLimit)
+    if (prevPotValue[i] != mapValue && abs(rawValue - prevPotRawValue[i]) >= potThreshold && abs(mapValue - prevPotValue[i]) <= changeLimit)
     {
      prevPotValue[i] = mapValue;
      prevPotRawValue[i] = rawValue;
@@ -140,7 +140,7 @@ void loop()
   //Read Fader
   int rawValue = analogRead(faderPin);
   int mapValue = map(rawValue,0,1023,-1,128);
-  if (faderValue != mapValue && abs(rawValue - prevFaderValue) >= 8 && abs(mapValue - faderValue) <= changeLimit)
+  if (faderValue != mapValue && abs(rawValue - prevFaderValue) >= faderThreshold && abs(mapValue - faderValue) <= changeLimit)
   {
    faderValue = mapValue;
    prevFaderValue = rawValue;

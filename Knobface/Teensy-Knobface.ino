@@ -35,10 +35,12 @@ int LEDPin1 = 26;
 int LEDPin2 = 29;
 int bankStart[4] = {10,27,44,61};
 
-int potThreshold = 6;  //Filters away analog noise, lower = more sensitive
+int potThreshold = 6;  //Prevents sudden CC changes incase of lots of noise
 int faderThreshold = 10; //same as above
-int changeLimit = 5; //Prevents sudden CC changes incase of lots of noise
+int changeLimit = 12; //Filters away analog noise, lower = more sensitive
 int bounceDelay = 50; //Prevents switch bounce issues
+
+boolean faderSingleBank = true; //if true, fader is not affected by bank changes
 
 int encoderValue[32];
 int encoderRawValue[32];
@@ -120,7 +122,7 @@ void loop()
   {
     int rawValue = analogRead(potPins[i]);
     int mapValue = map(rawValue,0,1023,-1,128);
-    if (prevPotValue[i] != mapValue && abs(rawValue - prevPotRawValue[i]) >= potThreshold && abs(mapValue - prevPotValue[i]) <= changeLimit)
+    if (prevPotValue[i] != mapValue && abs(rawValue - prevPotRawValue[i]) >= potThreshold && abs(rawValue - prevPotRawValue[i]) <= changeLimit)
     {
      prevPotValue[i] = mapValue;
      prevPotRawValue[i] = rawValue;
@@ -140,13 +142,17 @@ void loop()
   //Read Fader
   int rawValue = analogRead(faderPin);
   int mapValue = map(rawValue,0,1023,-1,128);
-  if (faderValue != mapValue && abs(rawValue - prevFaderValue) >= faderThreshold && abs(mapValue - faderValue) <= changeLimit)
+  if (faderValue != mapValue && abs(rawValue - prevFaderValue) >= faderThreshold && abs(rawValue - prevFaderValue) <= changeLimit)
   {
    faderValue = mapValue;
    prevFaderValue = rawValue;
    if (mapValue < 0) mapValue = 0;
    if (mapValue > 127) mapValue = 127;
-   if (debug == false) usbMIDI.sendControlChange(bankStart[currentBank]+8+8,mapValue,1);
+   if (debug == false) 
+   {
+     if (faderSingleBank == false) usbMIDI.sendControlChange(bankStart[currentBank]+8+8,mapValue,1);
+     else usbMIDI.sendControlChange(bankStart[0]+8+8,mapValue,1);
+   }
    if (debug == true)
    {
      Serial.print("Fader Change, CC: ");

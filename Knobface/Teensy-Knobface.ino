@@ -43,7 +43,7 @@ int bounceDelay = 50; //Prevents switch bounce issues
 boolean faderSingleBank = true; //if true, fader is not affected by bank changes
 
 int encoderValue[32];
-int encoderRawValue[32];
+int encoderRawValue[8];
 
 int prevPotValue[8];
 int prevPotRawValue[8];
@@ -108,14 +108,14 @@ void loop()
   }
   
   //Read encoders one by one
-  readEncoder(encoder1, &encoderValue[0+currentBank*8], bankStart[currentBank]+0,&encoderRawValue[0+currentBank*8]);
-  readEncoder(encoder2, &encoderValue[1+currentBank*8], bankStart[currentBank]+1,&encoderRawValue[1+currentBank*8]);
-  readEncoder(encoder3, &encoderValue[2+currentBank*8], bankStart[currentBank]+2,&encoderRawValue[2+currentBank*8]);
-  readEncoder(encoder4, &encoderValue[3+currentBank*8], bankStart[currentBank]+3,&encoderRawValue[3+currentBank*8]);
-  readEncoder(encoder5, &encoderValue[4+currentBank*8], bankStart[currentBank]+4,&encoderRawValue[4+currentBank*8]);
-  readEncoder(encoder6, &encoderValue[5+currentBank*8], bankStart[currentBank]+5,&encoderRawValue[5+currentBank*8]);
-  readEncoder(encoder7, &encoderValue[6+currentBank*8], bankStart[currentBank]+6,&encoderRawValue[6+currentBank*8]);
-  readEncoder(encoder8, &encoderValue[7+currentBank*8], bankStart[currentBank]+7,&encoderRawValue[7+currentBank*8]);
+  readEncoder(encoder1, &encoderValue[0+currentBank*8], bankStart[currentBank]+0,&encoderRawValue[0]);
+  readEncoder(encoder2, &encoderValue[1+currentBank*8], bankStart[currentBank]+1,&encoderRawValue[1]);
+  readEncoder(encoder3, &encoderValue[2+currentBank*8], bankStart[currentBank]+2,&encoderRawValue[2]);
+  readEncoder(encoder4, &encoderValue[3+currentBank*8], bankStart[currentBank]+3,&encoderRawValue[3]);
+  readEncoder(encoder5, &encoderValue[4+currentBank*8], bankStart[currentBank]+4,&encoderRawValue[4]);
+  readEncoder(encoder6, &encoderValue[5+currentBank*8], bankStart[currentBank]+5,&encoderRawValue[5]);
+  readEncoder(encoder7, &encoderValue[6+currentBank*8], bankStart[currentBank]+6,&encoderRawValue[6]);
+  readEncoder(encoder8, &encoderValue[7+currentBank*8], bankStart[currentBank]+7,&encoderRawValue[7]);
   
   //Read Pots
   for(int i=0;i<8;i++)

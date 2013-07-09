@@ -33,7 +33,7 @@ int faderPin = 34; //A10
 int buttonPin = 24;
 int LEDPin1 = 26;
 int LEDPin2 = 29;
-int bankStart[4] = {10,27,44,61};
+int bankStart[4] = {10,27,44,70};
 
 int potThreshold = 6;  //Prevents sudden CC changes incase of lots of noise
 int faderThreshold = 10; //same as above

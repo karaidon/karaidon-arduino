@@ -12,8 +12,8 @@ URL: https://github.com/karaidon/karaidon-arduino
 #define ENCODER_OPTIMIZE_INTERRUPTS
 #include <Encoder.h>
 
-boolean debug = false;
-boolean encoderIncrementMode = false; //Uses NRPN to provide increment/decrement endless values, may not work with all DAWs.
+const boolean debug = false;
+const boolean encoderIncrementMode = false; //Uses NRPN to provide increment/decrement endless values, may not work with all DAWs.
 /*Increment Mode works w/ FL Studio
 Does not work w/ Live
 Other DAWs not tested*/
@@ -27,20 +27,20 @@ Encoder encoder6(11, 10);
 Encoder encoder7(32, 12);
 Encoder encoder8(15, 14);
 
-int potPins[8] = {16,17,18,19,20,21,22,23};
+const int potPins[8] = {16,17,18,19,20,21,22,23};
 
-int faderPin = 34; //A10
-int buttonPin = 24;
-int LEDPin1 = 26;
-int LEDPin2 = 29;
-int bankStart[4] = {10,27,44,70};
+const int faderPin = 34; //A10
+const int buttonPin = 24;
+const int LEDPin1 = 26;
+const int LEDPin2 = 29;
+const int bankStart[4] = {10,27,44,70};
 
-int potThreshold = 6;  //Prevents sudden CC changes incase of lots of noise
-int faderThreshold = 10; //same as above
-int changeLimit = 12; //Filters away analog noise, lower = more sensitive
-int bounceDelay = 50; //Prevents switch bounce issues
+const int potThreshold = 6;  //Prevents sudden CC changes incase of lots of noise
+const int faderThreshold = 10; //same as above
+const int changeLimit = 12; //Filters away analog noise, lower = more sensitive
+const int bounceDelay = 50; //Prevents switch bounce issues
 
-boolean faderSingleBank = true; //if true, fader is not affected by bank changes
+const boolean faderSingleBank = true; //if true, fader is not affected by bank changes
 
 int encoderValue[32];
 int encoderRawValue[8];

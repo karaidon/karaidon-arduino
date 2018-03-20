@@ -6,23 +6,24 @@ for arduino and arduino compatible projects
 contact: Ben@Karaidon.com
 
 
-Copypasta:
+*Copypasta:*
 
 A 3-key macro keyboard, with keys bound to Copy, Cut and Paste actions.
 
 
-Knobface:
+*Knobface:*
 
 A 16-knob 1 crossfader MIDI Controller.
 
 
-envgen:
+*envgen:*
 
 ADSR envelope generator, using the analog output on the Teensy.
 
 
+*clockblock:*
 
-
+A midi-syncable click track generator and tap tempo generator. Generates simple click track beeps using PWM and sends on/off signals to effects pedals with external input jacks for tap tempo signals using an optocoupler.
 
 
 

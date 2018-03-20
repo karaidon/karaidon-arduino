@@ -5,6 +5,29 @@ for arduino and arduino compatible projects
 
 contact: Ben@Karaidon.com
 
+
+Copypasta:
+
+A 3-key macro keyboard, with keys bound to Copy, Cut and Paste actions.
+
+
+Knobface:
+
+A 16-knob 1 crossfader MIDI Controller.
+
+
+envgen:
+
+ADSR envelope generator, using the analog output on the Teensy.
+
+
+
+
+
+
+
+
+
 The MIT License (MIT)
 
 Copyright (c) 2013 Benedict Lee

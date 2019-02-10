@@ -26,7 +26,9 @@ linear ADSR envelope generator, using the analog output on the Teensy.
 A midi-syncable click track generator and tap tempo generator. Generates simple click track beeps using PWM and sends on/off signals to effects pedals with external input jacks for tap tempo signals using an optocoupler.
 
 
+*FootController:*
 
+6-button midi controller with expression pedal to MIDI CC conversion.
 
 
 The MIT License (MIT)

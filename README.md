@@ -18,7 +18,7 @@ A 16-knob 1 crossfader MIDI Controller.
 
 *envgen:*
 
-ADSR envelope generator, using the analog output on the Teensy.
+linear ADSR envelope generator, using the analog output on the Teensy.
 
 
 *clockblock:*
